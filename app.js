@@ -40,7 +40,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,  // ✅ .env에서 DB URL 가져오기
+        mongoUrl: process.env.MONGODB_URI,  // ✅ .env에서 DB URL 가져오기
         ttl: 14 * 24 * 60 * 60  // 14일 동안 세션 유지
     }),
     cookie: {
