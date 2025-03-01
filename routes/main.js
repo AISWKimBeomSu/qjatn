@@ -12,12 +12,12 @@ const mainLayout = "../views/layouts/main.ejs";
 const mainLayout2 = "../views/layouts/main2.ejs"; // 로그인 후 레이아웃 추가
 
 // 🔹 업로드 폴더 경로 설정
-const uploadDir = path.join(__dirname, "../public/uploads");
+//const uploadDir = path.join(__dirname, "../public/uploads");
 
 // 🔹 `public/uploads` 폴더가 없으면 생성
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+//if (!fs.existsSync(uploadDir)) {
+//    fs.mkdirSync(uploadDir, { recursive: true });
+//}
 
 router.get(["/", "/home"], asyncHandler(async(req, res) => {
     const locals = { title: "Home" };
@@ -75,8 +75,8 @@ router.get("/generate-image/:id", asyncHandler(async (req, res) => {
         const imageResponse = await axios.get(imageUrl, { responseType: "arraybuffer" });
         const imageBuffer = imageResponse.data;
         const imageFileName = `post_${post._id}.jpg`;
-        const imagePath = path.join(uploadDir, imageFileName);
-        fs.writeFileSync(imagePath, await sharp(imageBuffer).jpeg({ quality: 90 }).toBuffer());
+        //const imagePath = path.join(uploadDir, imageFileName);
+        //fs.writeFileSync(imagePath, await sharp(imageBuffer).jpeg({ quality: 90 }).toBuffer());
 
         post.image = imageBuffer;
         await post.save();
@@ -106,7 +106,7 @@ router.get("/image/:id", asyncHandler(async (req, res) => {
 }));
 
 // 🔹 정적 파일 제공 (저장된 이미지 서빙)
-router.use("/uploads", express.static(uploadDir));
+//router.use("/uploads", express.static(uploadDir));
 
 router.get("/about", (req, res) => {
     res.render("about", { layout: mainLayout });
