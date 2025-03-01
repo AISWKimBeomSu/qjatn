@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const Post = require("../models/Post");
 const jwt = require("jsonwebtoken");
+const moment = require("moment-timezone");
 const jwtSecret = process.env.JWT_SECRET;
 
 // 로그인 상태 확인 미들웨어
@@ -141,7 +142,7 @@ router.get(
         };
         res.render("admin/add", {
             locals,
-            layout: adminLayout,
+            layout: adminLayout
         });
     })
 );
@@ -150,19 +151,21 @@ router.get(
 router.post(
     "/add",
     checkLogin,
-    asyncHandler(async(req, res) => {
+    asyncHandler(async (req, res) => {
         const { title, body, style } = req.body;
 
         const newPost = new Post({
             title: title,
             body: body,
             style: style,
+            createdAt: moment().tz("Asia/Seoul").toDate() // ✅ KST로 변환한 `Date` 객체 저장
         });
 
         await Post.create(newPost);
         res.redirect(`/post/${newPost._id}`);
     })
 );
+
 
 // 게시물 수정
 router.get(
@@ -190,7 +193,7 @@ router.put(
         await Post.findByIdAndUpdate(req.params.id, {
             title: req.body.title,
             body: req.body.body,
-            createdAt: Date.now(),
+            createdAt: moment().tz("Asia/Seoul").toDate() // ✅ KST로 변환한 `Date` 객체 저장
         });
         // 수정한 후 전체 목록 다시 표시하기
         res.redirect("/allPosts");
